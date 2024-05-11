@@ -1,8 +1,10 @@
+import { testAction } from '@/app/actions/text';
 import { currentUser } from '@clerk/nextjs/server';
 
 export default async function Page() {
   const user = await currentUser();
-
+  const res = await testAction();
+  console.log('----', res);
   return (
     <section className='py-24'>
       <div className='container'>
