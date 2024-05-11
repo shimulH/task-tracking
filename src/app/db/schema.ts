@@ -60,14 +60,14 @@ export const CoreLabel = pgTable('core_label', {
   color: varchar('color', { length: 256 }).notNull(),
 });
 
-export const BoardLabel = pgTable('core_label', {
+export const BoardLabel = pgTable('board_label', {
   id: uuid('id').primaryKey().defaultRandom(),
   boardId: uuid('board_id').references(() => Board.id),
   color: varchar('color', { length: 256 }).notNull(),
   name: varchar('name', { length: 256 }).notNull(),
 });
 
-export const CardLabel = pgTable('core_label', {
+export const CardLabel = pgTable('card_label', {
   labelId: uuid('board_id').references(() => Board.id),
   cardId: text('card_id').references(() => Card.id),
 });
@@ -89,20 +89,19 @@ export const CardActivity = pgTable('card_activity', {
 //Relations
 export const UserTableRelations = relations(User, ({ one, many }) => {
   return {
-    comments: one(Board),
-    cardMember: one(CardMember),
-    boardMember: one(BoardMember),
+    cardMember: many(CardMember),
+    boardMember: many(BoardMember),
     cardActivity: many(CardActivity),
+    board: many(Board),
   };
 });
 
 export const BoardTableRelations = relations(Board, ({ one, many }) => {
   return {
-    user: many(User),
-    cardMember: many(CardMember),
-    boardLabel: one(BoardLabel),
-    list: one(List),
-    boardMember: one(BoardMember),
+    user: one(User, { fields: [Board.userId], references: [User.id] }),
+    boardLabel: many(BoardLabel),
+    list: many(List),
+    boardMember: many(BoardMember),
   };
 });
 
@@ -110,8 +109,11 @@ export const BoardMemberTableRelations = relations(
   BoardMember,
   ({ one, many }) => {
     return {
-      user: many(Board),
-      board: many(Board),
+      user: one(User, { fields: [BoardMember.userId], references: [User.id] }),
+      board: one(Board, {
+        fields: [BoardMember.boardId],
+        references: [Board.id],
+      }),
     };
   }
 );
@@ -120,8 +122,8 @@ export const CardMemberTableRelations = relations(
   CardMember,
   ({ one, many }) => {
     return {
-      user: many(User),
-      card: many(Card),
+      user: one(User, { fields: [CardMember.userId], references: [User.id] }),
+      card: one(Card, { fields: [CardMember.cardId], references: [Card.id] }),
     };
   }
 );
@@ -130,31 +132,34 @@ export const CardActivityTableRelations = relations(
   CardActivity,
   ({ one, many }) => {
     return {
-      user: many(User),
-      card: many(Card),
+      user: one(User, { fields: [CardActivity.userId], references: [User.id] }),
+      card: one(Card, { fields: [CardActivity.cardId], references: [Card.id] }),
     };
   }
 );
 
 export const ListTableRelations = relations(List, ({ one, many }) => {
   return {
-    board: many(Board),
-    card: one(Card),
+    board: one(Board, { fields: [List.boardId], references: [Board.id] }),
+    card: many(Card),
   };
 });
 
 export const CardTableRelations = relations(Card, ({ one, many }) => {
   return {
-    list: many(List),
-    cardMember: one(CardMember),
-    cardLabel: one(CardLabel),
+    list: one(List, { fields: [Card.listId], references: [List.id] }),
+    cardMember: many(CardMember),
+    cardLabel: many(CardLabel),
   };
 });
 
 export const CarDLabelTableRelations = relations(CardLabel, ({ one, many }) => {
   return {
-    boardLabelId: many(BoardLabel),
-    card: many(Card),
+    boardLabelId: one(BoardLabel, {
+      fields: [CardLabel.labelId],
+      references: [BoardLabel.id],
+    }),
+    card: one(Card, { fields: [CardLabel.cardId], references: [Card.id] }),
   };
 });
 
@@ -162,8 +167,11 @@ export const BoardDLabelTableRelations = relations(
   BoardLabel,
   ({ one, many }) => {
     return {
-      boardId: many(Board),
-      card: one(CardLabel),
+      board: one(Board, {
+        fields: [BoardLabel.boardId],
+        references: [Board.id],
+      }),
+      cardLabel: many(CardLabel),
     };
   }
 );

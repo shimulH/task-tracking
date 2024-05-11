@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "drizzle:seed": "tsx seed.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.0.7",
@@ -25,15 +26,19 @@
     "uuid4": "^2.0.3"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@types/node": "^20",
+    "@types/pg": "^8.11.6",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/uuid": "^9.0.8",
     "drizzle-kit": "^0.21.1",
+    "esbuild-register": "^3.5.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.9.4",
     "typescript": "^5"
   }
 }
