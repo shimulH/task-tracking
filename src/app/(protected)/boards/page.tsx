@@ -1,3 +1,5 @@
+'use client';
+
 import { testAction } from '@/app/actions/text';
 import { currentUser } from '@clerk/nextjs/server';
 
@@ -16,6 +18,9 @@ import {
   DropdownMenu,
 } from '@/components/ui/dropdown-menu';
 import { CardContent, Card } from '@/components/ui/card';
+import Test from '@/components/test';
+import Dropzone from '@/components/dropzone';
+import { useState } from 'react';
 
 const data = {
   col: [
@@ -92,11 +97,14 @@ const data = {
 };
 
 function Component() {
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+
   return (
     <div className='flex h-full w-full flex-col bg-gray-100 mt-10 rounded-sm'>
       <div className='flex h-full w-full flex-col gap-6 p-6 md:flex-row'>
         {data?.col.map((colum: any, i) => (
-          <div key={i + 1} className='flex flex-1 flex-col gap-4'>
+          <div key={i + 1} className='flex flex-1 flex-col gap-1'>
             <div className='flex items-center justify-between'>
               <h2 className='text-lg font-semibold'>{colum.name}</h2>
               <Button size='icon' variant='ghost'>
@@ -104,31 +112,28 @@ function Component() {
                 <span className='sr-only'>Add new</span>
               </Button>
             </div>
-            <div className='flex flex-col gap-4 overflow-y-auto'>
+            <Dropzone />
+
+            <div className='flex flex-col gap-1 overflow-y-auto'>
               {console.log('ccc', colum.cards[0].name)}
-              <div className='bg-white p-3 rounded-lg shadow-sm mb-4'>
-                <h3 className='text-sm font-semibold mb-1'>Task 1</h3>
-                <p className='text-sm text-gray-600 dark:text-gray-400'>
-                  This is a description for task 1.
-                </p>
-                <div className='text-xs text-gray-500 dark:text-gray-400'>
-                  May 1, 2023
-                </div>
-              </div>
 
               {colum.cards.map((card: any, i: number) => (
-                <div
-                  key={i + 1}
-                  className='bg-white p-3 rounded-lg shadow-sm mb-4'
-                >
-                  <h3 className='text-sm font-semibold mb-1'>Task 1</h3>
-                  <p className='text-sm text-gray-600 dark:text-gray-400'>
-                    This is a description for task 1.
-                  </p>
-                  <div className='text-xs text-gray-500 dark:text-gray-400'>
-                    May 1, 2023
+                <>
+                  <div
+                    key={i + 1}
+                    className='bg-white p-3 rounded-lg shadow-sm mb-1'
+                    draggable={true}
+                  >
+                    <h3 className='text-sm font-semibold mb-1'>Task 1</h3>
+                    <p className='text-sm text-gray-600 dark:text-gray-400'>
+                      This is a description for task 1.
+                    </p>
+                    <div className='text-xs text-gray-500 dark:text-gray-400'>
+                      May 1, 2023
+                    </div>
                   </div>
-                </div>
+                  <Dropzone />
+                </>
               ))}
             </div>
           </div>
@@ -157,10 +162,10 @@ function PlusIcon(props: any) {
     </svg>
   );
 }
-export default async function Page() {
-  const user = await currentUser();
-  const res = await testAction();
-  console.log('----', res);
+export default function Page() {
+  //const user = await currentUser();
+  //const res = await testAction();
+  //console.log('----', res);
   return (
     <section className=''>
       <Component />
