@@ -1,3 +1,5 @@
+import { CardDef } from '@/app/db/schema';
+
 export enum Columns {
   IDEAS,
   IN_PROGRESS,
@@ -19,8 +21,8 @@ export type CardsState = { [key in Columns]: Card[] };
 
 export type ColumnProps = {
   title: string;
-  id: Columns;
-  cards: Card[];
-  onDrop: (column: Columns, index: number) => void;
+  id: string;
+  cards: CardDef[] | undefined;
+  onDrop: (column: string, index: number, dropAreaColumn: number) => void;
   index: number;
 };

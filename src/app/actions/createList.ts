@@ -1,6 +1,6 @@
 'use server';
 
-import { ListDef } from './../db/schema';
+import { ListDef } from '../db/schema';
 import { currentUser } from '@clerk/nextjs/server';
 import { db } from '../db/drizzle';
 import { List } from '../db/schema';

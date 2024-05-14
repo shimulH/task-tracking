@@ -21,7 +21,7 @@ export const moveCardToColumn = ({
 }: {
   cards: CardsState;
   cardId: string;
-  column: Columns;
+  column: string;
   index: number;
 }) => {
   // Object.entries converts an object into an array of [key, value] pairs.

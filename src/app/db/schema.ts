@@ -179,4 +179,4 @@ export const BoardDLabelTableRelations = relations(
 export type UserDef = typeof User.$inferSelect;
 export type ListDef = typeof List.$inferSelect;
 export type BoardDef = typeof Board.$inferSelect;
-export type CardDer = typeof Card.$inferSelect;
+export type CardDef = typeof Card.$inferSelect;

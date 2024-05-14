@@ -1,4 +1,6 @@
-import { useState } from 'react';
+'use client';
+
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { Columns } from '@/types/types';
 import { initialCardsPosition } from '@/store/data';
@@ -7,52 +9,95 @@ import { cn, moveCardToColumn } from '@/lib/utils';
 import { Column } from '@/components/column';
 import { NewColumn } from './new-list';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { getCookie } from 'cookies-next';
+import { CardDef, ListDef } from '@/app/db/schema';
+import updateCard from '@/app/actions/updateCard';
+import { DropAreaColumn } from './drop-area-columns';
 
-const columnTitles: { [key in Columns]: string } = {
-  [Columns.IDEAS]: '💡 Ideas',
-
-  [Columns.IN_PROGRESS]: '⏳ In Progress',
-  [Columns.DONE]: '✅ Done',
-  [Columns.DONEEE]: '✅ Done',
-  [Columns.DONEEEE]: '✅ Done',
-  [Columns.DONEEEEE]: '✅ Done',
-  [Columns.DONEEEEEE]: '✅ Done',
-};
-
-const columns = Object.entries(columnTitles) as unknown as [Columns, string][];
-
-export default function Board() {
-  const [cards, setCards] = useState(initialCardsPosition);
+interface ColumnDef extends ListDef {
+  cards?: CardDef[] | undefined;
+}
+export default function Board({
+  lists,
+  cards,
+}: {
+  lists: ListDef[] | undefined;
+  cards: CardDef[] | undefined;
+}) {
   const [isVisible, setIsVisible] = useState(false);
   const draggingCard = useBoardStore((state) => state.draggingCard);
-  const [addedColumns, addColumn] = useState(
-    columns.length ? columns.length + 1 : 3
-  );
+  const draggingColumn = useBoardStore((state) => state.draggingColumn);
 
-  const addColumns = () => {
-    addColumn(addedColumns + 1);
-  };
+  const [columns, setColumns] = useState<ColumnDef[] | undefined>();
 
-  const onDrop = (column: Columns, index: number) => {
+  const boardId = useBoardStore((state) => state.boardId);
+
+  const onDrop = async (
+    column: string,
+    index: number,
+    dropAreaColumn: number
+  ) => {
     if (!draggingCard) return;
 
-    const newCards = moveCardToColumn({
-      cards,
-      cardId: draggingCard,
-      column,
-      index,
-    });
-    // @ts-ignore
-    if (document.startViewTransition) {
+    const newPosition = index;
+    const prevPosition = draggingCard.cardIndex;
+    if (draggingCard.columnIndex === dropAreaColumn) {
+      let cloneColumns = columns && [...columns];
+      let cloneFilteredCards = cloneColumns && [
+        ...cloneColumns[dropAreaColumn].cards!,
+      ];
+
+      cloneFilteredCards?.splice(
+        newPosition,
+        0,
+        cloneFilteredCards.splice(prevPosition!, 1)[0]
+      );
+
+      if (cloneColumns) {
+        cloneColumns[dropAreaColumn].cards = cloneFilteredCards;
+      }
+
       // @ts-ignore
-      document.startViewTransition(() => {
-        flushSync(() => {
-          setCards(newCards);
+      if (document.startViewTransition) {
+        // @ts-ignore
+        document.startViewTransition(() => {
+          flushSync(() => {
+            setColumns(cloneColumns);
+          });
         });
-      });
-      // If view transitions aren't supported other browser, we just update the state.
-    } else {
-      setCards(newCards);
+        // If view transitions aren't supported other browser, we just update the state.
+      } else {
+        setColumns(cloneColumns);
+      }
+    }
+
+    if (draggingCard.columnIndex !== dropAreaColumn) {
+      let cloneColumns = columns && [...columns];
+
+      if (cloneColumns && draggingCard) {
+        const movedCard = cloneColumns[draggingCard.columnIndex].cards?.find(
+          (card) => card.id === draggingCard.id
+        );
+        console.log(movedCard, draggingCard);
+        cloneColumns[dropAreaColumn].cards?.splice(newPosition, 0, movedCard!);
+
+        cloneColumns[draggingCard.columnIndex].cards = cloneColumns[
+          draggingCard.columnIndex
+        ].cards?.filter((card) => card.id !== draggingCard.id);
+      }
+
+      // @ts-ignore
+      if (document.startViewTransition) {
+        // @ts-ignore
+        document.startViewTransition(() => {
+          flushSync(() => {
+            setColumns(cloneColumns);
+          });
+        });
+        // If view transitions aren't supported other browser, we just update the state.
+      } else {
+        setColumns(cloneColumns);
+      }
     }
   };
 
@@ -64,49 +109,58 @@ export default function Board() {
     setIsVisible(false);
   };
 
-  const columnsMod: number = columns.length ? columns.length + 1 : 3;
+  const handleDrop = (index: number) => {
+    if (!draggingColumn) return;
 
-  const handleDrop = (e: DragEvent) => {
-    e.dataTransfer?.getData('id');
-    const prevPosition = Number(e.dataTransfer?.getData('id'));
-    const newPosition = 0;
-    console.log(
-      columns.splice(newPosition, 0, columns.splice(prevPosition, 1))
+    const prevPosition = Number(draggingColumn);
+    const newPosition = index;
+    console.log('before', columns);
+
+    let cloneColumns = columns && [...columns];
+
+    cloneColumns?.splice(
+      newPosition,
+      0,
+      cloneColumns.splice(prevPosition, 1)[0]
     );
-    console.log(columns);
-    const newColumn = [...columns.slice(0, prevPosition)];
+
+    setColumns(cloneColumns);
+
+    console.log('after', columns);
   };
+
+  useEffect(() => {
+    setColumns(
+      lists?.map((column) => ({
+        ...column,
+        cards: cards?.filter((card) => card.listId === column.id),
+      }))
+    );
+  }, [lists]);
 
   return (
     <div className='flex '>
       <div className='flex flex-row'>
         <ScrollArea className='md:w-[calc(100vw-2rem)] md:overflow-x-auto md:overflow-y-hidden'>
           <div className='flex w-max space-x-4 p-4'>
-            <div
-              className='relative w-10 transition-[padding,opacity] before:absolute before:inset-2 before:rounded-xl before:border-2 before:border-dashed before:border-gray-500 before:bg-gray-600 only:h-32 last:h-32'
-              onDrop={(e) => handleDrop(e)}
-              onDragOver={(ev) => ev.preventDefault()}
-            />
-            {columns.map(([columnId, columnTitle], index) => (
+            <DropAreaColumn handleDrop={() => handleDrop(0)} />
+            {columns?.map((column, index) => (
               <>
-                <div key={columnId} className='h-full'>
+                <div key={column.id} className='h-full'>
                   <Column
-                    title={columnTitle}
-                    id={columnId}
-                    cards={cards[columnId]}
+                    title={column.name}
+                    id={column.id}
+                    cards={column.cards}
                     onDrop={onDrop}
                     index={index}
                   />
                 </div>
-                <div
-                  className='relative w-10 transition-[padding,opacity] before:absolute before:inset-2 before:rounded-xl before:border-2 before:border-dashed before:border-gray-500 before:bg-gray-600 only:h-32 last:h-32'
-                  onDrop={(e) => console.log(e.dataTransfer.getData('id'))}
-                  onDragOver={(ev) => ev.preventDefault()}
-                />
+
+                <DropAreaColumn handleDrop={() => handleDrop(index + 1)} />
               </>
             ))}
             <div className='h-full'>
-              <NewColumn addColumns={addColumns} title='New Col' />
+              <NewColumn addColumns={() => console.log('kk')} title='New Col' />
             </div>
           </div>
           <ScrollBar orientation='horizontal' />

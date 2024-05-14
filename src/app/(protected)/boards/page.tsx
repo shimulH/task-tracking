@@ -1,17 +1,29 @@
-'use client';
-
-import { testAction } from '@/app/actions/text';
 import { currentUser } from '@clerk/nextjs/server';
 
 import Board from '@/components/board';
+import getBoards from '@/app/actions/getBoards';
+import { cookies } from 'next/headers';
+import Boards from '@/components/boards';
+import getLists from '@/app/actions/getLists';
+import getCards from '@/app/actions/getCards';
 
-export default function Page() {
-  //const user = await currentUser();
-  //const res = await testAction();
-  //console.log('----', res);
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: { boardId: string };
+}) {
+  const res = await getBoards();
+  const boardId = searchParams.boardId;
+  const cards = await getCards();
+  let lists;
+  if (boardId) {
+    lists = await getLists(boardId);
+    console.log('list ----', res);
+  }
   return (
     <section className=''>
-      <Board />
+      <Boards boards={res?.data} />
+      <Board cards={cards?.data} lists={lists?.data} />
     </section>
   );
 }
