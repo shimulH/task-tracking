@@ -16,7 +16,7 @@ import {
 
 export default function Header() {
   return (
-    <header className='flex h-16 w-full items-center justify-between bg-gray-950 px-4 md:px-6'>
+    <header className='flex h-16 sticky top-0 shadow-sm w-full items-center justify-between bg-gray-900 px-4 md:px-6'>
       <Link className='flex items-center gap-2' href='#'>
         <MountainIcon className='h-6 w-6 text-white' />
         <span className='text-white'>Acme Inc</span>

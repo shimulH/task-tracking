@@ -1,4 +1,4 @@
-import { relations } from 'drizzle-orm';
+import { InferModel, relations } from 'drizzle-orm';
 import {
   integer,
   text,
@@ -9,8 +9,8 @@ import {
   timestamp,
 } from 'drizzle-orm/pg-core';
 
-export const User = pgTable('task_user', {
-  id: varchar('id', { length: 256 }).primaryKey().notNull(),
+export const User = pgTable('user', {
+  id: text('id').primaryKey().notNull(),
 
   //   createdAt: timestamp('created_at').defaultNow().notNull(),
   //   updatedAt: timestamp('updated_at').defaultNow().notNull(),
@@ -20,20 +20,20 @@ export const User = pgTable('task_user', {
   userLastName: text('user_last_name').notNull(),
 });
 
-export const Board = pgTable('board', {
+export const Board = pgTable('boards', {
   id: uuid('id').primaryKey().defaultRandom(),
   name: varchar('name', { length: 256 }).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
-  userId: text('id').references(() => User.id),
+  userId: text('user_id').references(() => User.id),
 });
 
-export const BoardMember = pgTable('card_member', {
+export const BoardMember = pgTable('card_members', {
   boardId: uuid('card_id').references(() => Board.id),
   userId: text('user_id').references(() => User.id),
 });
 
-export const List = pgTable('list', {
+export const List = pgTable('lists', {
   id: uuid('id').primaryKey().defaultRandom(),
   name: varchar('name', { length: 256 }).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -42,7 +42,7 @@ export const List = pgTable('list', {
   position: text('position').notNull(),
 });
 
-export const Card = pgTable('card', {
+export const Card = pgTable('cards', {
   id: uuid('id').primaryKey().defaultRandom(),
   title: text('name').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -54,13 +54,13 @@ export const Card = pgTable('card', {
   isActive: boolean('is_active').notNull(),
 });
 
-export const CoreLabel = pgTable('core_label', {
+export const CoreLabel = pgTable('core_labels', {
   id: uuid('id').primaryKey().defaultRandom(),
   name: varchar('name', { length: 256 }).notNull(),
   color: varchar('color', { length: 256 }).notNull(),
 });
 
-export const BoardLabel = pgTable('board_label', {
+export const BoardLabel = pgTable('board_labels', {
   id: uuid('id').primaryKey().defaultRandom(),
   boardId: uuid('board_id').references(() => Board.id),
   color: varchar('color', { length: 256 }).notNull(),
@@ -69,10 +69,10 @@ export const BoardLabel = pgTable('board_label', {
 
 export const CardLabel = pgTable('card_label', {
   labelId: uuid('board_id').references(() => Board.id),
-  cardId: text('card_id').references(() => Card.id),
+  cardId: uuid('card_id').references(() => Card.id),
 });
 
-export const CardMember = pgTable('card_member', {
+export const CardMember = pgTable('card_members', {
   cardId: uuid('card_id').references(() => Card.id),
   userId: text('user_id').references(() => User.id),
 });
@@ -175,3 +175,8 @@ export const BoardDLabelTableRelations = relations(
     };
   }
 );
+
+export type UserDef = typeof User.$inferSelect;
+export type ListDef = typeof List.$inferSelect;
+export type BoardDef = typeof Board.$inferSelect;
+export type CardDer = typeof Card.$inferSelect;

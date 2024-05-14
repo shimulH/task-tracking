@@ -22,8 +22,8 @@ export default function RootLayout({
         className='scroll-smooth antialiased'
         suppressHydrationWarning
       >
-        <body className={`flex min-h-screen flex-col ${inter.className}`}>
-          <main className='grow'>{children}</main>
+        <body className={`${inter.className}`}>
+          <main className='hd:w-[2024px] mx-auto'>{children}</main>
         </body>
       </html>
     </ClerkProvider>
