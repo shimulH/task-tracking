@@ -17,7 +17,7 @@ async function layout({ children }: { children: React.ReactNode }) {
     .select()
     .from(Card)
     .fullJoin(List, eq(Card.listId, List.id));
-  console.log('boardsdfsfsf-----', lists, cards);
+  // console.log('boardsdfsfsf-----', lists, cards);
 
   return (
     <div className='flex flex-col justify-center relative overflow-hidden text-gray-300'>

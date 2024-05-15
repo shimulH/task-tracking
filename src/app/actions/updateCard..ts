@@ -5,14 +5,17 @@ import { db } from '../db/drizzle';
 import { log } from '../log';
 import { v4 as uuidv4 } from 'uuid';
 import { revalidatePath } from 'next/cache';
+import { eq } from 'drizzle-orm';
 
-async function createCard({
+async function updateCard({
+  id,
   title,
   listId,
   dueDate,
   description,
   reminderDate,
 }: {
+  id: CardDef['id'];
   title: CardDef['title'];
   listId: CardDef['listId'];
   dueDate: CardDef['dueDate'];
@@ -20,17 +23,20 @@ async function createCard({
   reminderDate: CardDef['reminderDate'];
 }) {
   log.info('creating card..');
-  const res = await db.insert(Card).values({
-    id: uuidv4(),
-    title,
-    description,
-    dueDate,
-    reminderDate,
-    listId,
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  });
+  const res = await db
+    .update(Card)
+    .set({
+      id,
+      title,
+      description,
+      dueDate,
+      reminderDate,
+      listId,
+      isActive: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
+    .where(eq(Card.id, id));
 
   console.log(res);
   revalidatePath('/boards');
@@ -38,4 +44,4 @@ async function createCard({
   return { success: true };
 }
 
-export default createCard;
+export default updateCard;

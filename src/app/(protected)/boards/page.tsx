@@ -18,7 +18,7 @@ export default async function Page({
   let lists;
   if (boardId) {
     lists = await getLists(boardId);
-    console.log('list ----', res);
+    //   console.log('list ----', res);
   }
   return (
     <section className=''>

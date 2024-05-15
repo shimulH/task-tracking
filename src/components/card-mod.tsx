@@ -5,6 +5,8 @@ import { useState } from 'react';
 import CardDetails from './card-details';
 import { DialogTrigger } from '@radix-ui/react-dialog';
 import { Dialog } from './ui/dialog';
+import deleteCard from '@/app/actions/deleteCard';
+import { TrashIcon } from '@radix-ui/react-icons';
 
 export default function CardMod({
   card,
@@ -18,6 +20,9 @@ export default function CardMod({
   const setDraggingCard = useBoardStore((state) => state.setDraggingCard);
   const [openDetails, setOpen] = useState(false);
 
+  const deleteSelectedCard = async () => {
+    await deleteCard({ id: card.id });
+  };
   return (
     <Dialog>
       <Card
@@ -34,15 +39,23 @@ export default function CardMod({
       >
         <CardContent>
           <div className='flex  flex-col gap-2 '>
-            <DialogTrigger>
-              <div className='flex justify-between'>
-                <h3 className='text-lg font-semibold '>{card?.title}</h3>
-                <div>Edit</div>
+            <div className='flex justify-between'>
+              <h3 className='text-lg font-semibold '>{card?.title}</h3>
+              <div className='flex gap-4'>
+                <DialogTrigger>
+                  <div>Edit</div>
+                </DialogTrigger>
+                <TrashIcon
+                  className='cursor-pointer h-5 w-5  '
+                  onClick={() => deleteSelectedCard()}
+                />
               </div>
-            </DialogTrigger>
+            </div>
 
             <p className='text-sm text-gray-500 dark:text-gray-400'>
-              Product launch for our new line of smart home devices.
+              {card.description.length
+                ? card.description
+                : 'Some Pre generated Tex Product launch for our new line of smart home devices.'}
             </p>
             <div className='flex items-center gap-2'>
               <span className='bg-green-700 text-white px-2 py-1 rounded-md text-xs font-medium'>
