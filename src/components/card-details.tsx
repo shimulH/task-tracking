@@ -81,6 +81,7 @@ function CardDetails({
       reminderDate: card.reminderDate,
       listId: data.category,
     };
+    console.log(data);
     const res = await updateCard(payload);
   }
   useEffect(() => {
@@ -149,7 +150,10 @@ function CardDetails({
           <div className='flex gap-2 justify-between pl-4 pr-4 '>
             <div className='w-66'>
               <Label className='font-bold'>Due Date</Label>
-              <div>{format(form.watch('dueDate'), 'yy/MM/dd: h:m:s')}</div>
+              <div>
+                {form.watch('dueDate') &&
+                  format(form.watch('dueDate'), 'yy/MM/dd: h:m:s')}
+              </div>
             </div>
             <div className='w-[230px]'>
               <Label className='font-bold'>Remind me at</Label>

@@ -15,7 +15,7 @@ function Boards({ boards }: { boards: BoardDef[] | undefined }) {
     boards && router.push(`${pathName}?boardId=${boards[0].id}`);
   }, [boards]);
   return (
-    <div className='p-12 flex'>
+    <div className=''>
       {/* {boards?.map((board, index) => (
         <div
           key={index + 1}
