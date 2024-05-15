@@ -15,13 +15,12 @@ export default async function Page({
   const res = await getBoards();
   const boardId = searchParams.boardId;
   const cards = await getCards();
-  let lists;
-  if (boardId) {
-    lists = await getLists(boardId);
-  }
+
+  const lists = await getLists(process.env.NEXT_PUBLIC_BOARD_ID!);
+
   return (
     <section className=''>
-      <Boards boards={res?.data} />
+      {/* <Boards boards={res?.data} /> */}
       <Board cards={cards?.data} lists={lists?.data} />
     </section>
   );

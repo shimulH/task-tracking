@@ -7,9 +7,9 @@ export default clerkMiddleware((auth, req) => {
   if (isProtectedRoute(req)) auth().protect();
   const isRootRoute = req.nextUrl.pathname === rootRoute;
 
-  if (isRootRoute) {
-    return Response.redirect(new URL('/boards', req.nextUrl));
-  }
+  // if (isRootRoute) {
+  //   return Response.redirect(new URL('/boards', req.nextUrl));
+  // }
 });
 
 export const config = {
