@@ -5,7 +5,7 @@ import { useBoardStore } from '@/store/board-store';
 import React, { useEffect } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-function boards({ boards }: { boards: BoardDef[] | undefined }) {
+function Boards({ boards }: { boards: BoardDef[] | undefined }) {
   const router = useRouter();
   const pathName = usePathname();
   const searchParams = useSearchParams();
@@ -15,8 +15,8 @@ function boards({ boards }: { boards: BoardDef[] | undefined }) {
     boards && router.push(`${pathName}?boardId=${boards[0].id}`);
   }, [boards]);
   return (
-    <div>
-      {/* {boards?.map((board, index) => (
+    <div className='p-12 flex'>
+      {boards?.map((board, index) => (
         <div
           key={index + 1}
           className={cn(
@@ -27,9 +27,9 @@ function boards({ boards }: { boards: BoardDef[] | undefined }) {
         >
           <h1>{board.name}</h1>
         </div>
-      ))} */}
+      ))}
     </div>
   );
 }
 
-export default boards;
+export default Boards;

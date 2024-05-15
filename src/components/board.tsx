@@ -1,15 +1,11 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { flushSync } from 'react-dom';
-import { Columns } from '@/types/types';
-import { initialCardsPosition } from '@/store/data';
 import { useBoardStore } from '@/store/board-store';
-import { cn, moveCardToColumn } from '@/lib/utils';
 import { Column } from '@/components/column';
 import { NewColumn } from './new-list';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { getCookie } from 'cookies-next';
 import { CardDef, CardIndexDef, ListDef } from '@/app/db/schema';
 import updateCard from '@/app/actions/updateCard.';
 import { DropAreaColumn } from './drop-area-columns';
@@ -90,7 +86,7 @@ export default function Board({
         cloneColumns?.map((column) => {
           updateCardIndex({
             listId: column.id,
-            cardIndexArray: column.cards?.map((card) => card.id),
+            cardIndexArray: column.cards?.map((card) => card.id) ?? null,
           });
         });
       }
@@ -153,22 +149,22 @@ export default function Board({
     fetchIndex();
   }, []);
 
-  useEffect(() => {
-    let cloneColumns = columns && [...columns];
+  // useEffect(() => {
+  //   let cloneColumns = columns && [...columns];
 
-    cloneColumns = cloneColumns?.map((col) =>
-      cardIndexByColumn?.map((data) => {
-        if (data.listId === col.id) {
-          let temCards: CardDef[] = [];
-          data.cardIndexArray?.map((index) => {
-            temCards.push(col.cards?.find((card) => card.id === index)!);
-          });
-          return { ...col, cards: temCards };
-        }
-      })
-    );
-    console.log(cloneColumns);
-  }, [cardIndexByColumn]);
+  //   cloneColumns = cloneColumns?.map((col) =>
+  //     cardIndexByColumn?.map((data) => {
+  //       if (data.listId === col.id) {
+  //         let temCards: CardDef[] = [];
+  //         data.cardIndexArray?.map((index) => {
+  //           temCards.push(col.cards?.find((card) => card.id === index)!);
+  //         });
+  //         return { ...col, cards: temCards };
+  //       }
+  //     })
+  //   );
+  //   console.log(cloneColumns);
+  // }, [cardIndexByColumn]);
 
   return (
     <div className='flex '>
@@ -192,7 +188,7 @@ export default function Board({
               </>
             ))}
             <div className='h-full'>
-              <NewColumn title='New Col' />
+              <NewColumn />
             </div>
           </div>
           <ScrollBar orientation='horizontal' />

@@ -109,15 +109,11 @@ function CardDetails({
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
           <div className='space-y-2'>
-            <Label htmlFor='title'>Title</Label>
-            <Input
-              id='title'
-              {...form.register('name')}
-              placeholder='Enter a title'
-            />
+            <Label>Title</Label>
+            <Input {...form.register('name')} placeholder='Enter a title' />
           </div>
           <div className='space-y-2'>
-            <Label htmlFor='description'>Description</Label>
+            <Label>Description</Label>
             <Textarea
               className='min-h-[100px]'
               id='description'
@@ -139,7 +135,9 @@ function CardDetails({
                   </FormControl>
                   <SelectContent className='max-h-48 overflow-y-auto'>
                     {columns?.map((column) => (
-                      <SelectItem value={column.id}>{column.name}</SelectItem>
+                      <SelectItem key={column.id} value={column.id}>
+                        {column.name}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -165,7 +163,7 @@ function CardDetails({
           </div>
           <div className='flex gap-2 justify-between pl-4 pr-4  '>
             <div className='bg-white '>
-              <Label htmlFor='date'>Change Due Date</Label>
+              <Label>Change Due Date</Label>
               <input
                 className='max-w-66 mt-2'
                 id='date'
@@ -190,7 +188,10 @@ function CardDetails({
                     </FormControl>
                     <SelectContent>
                       {DefaultRemindMeTime.map((item) => (
-                        <SelectItem value={String(item.value)}>
+                        <SelectItem
+                          key={item.value + 1}
+                          value={String(item.value)}
+                        >
                           {item.text}
                         </SelectItem>
                       ))}
@@ -219,31 +220,3 @@ function CardDetails({
 }
 
 export default CardDetails;
-
-function CalendarDaysIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns='http://www.w3.org/2000/svg'
-      width='24'
-      height='24'
-      viewBox='0 0 24 24'
-      fill='none'
-      stroke='currentColor'
-      strokeWidth='2'
-      strokeLinecap='round'
-      strokeLinejoin='round'
-    >
-      <path d='M8 2v4' />
-      <path d='M16 2v4' />
-      <rect width='18' height='18' x='3' y='4' rx='2' />
-      <path d='M3 10h18' />
-      <path d='M8 14h.01' />
-      <path d='M12 14h.01' />
-      <path d='M16 14h.01' />
-      <path d='M8 18h.01' />
-      <path d='M12 18h.01' />
-      <path d='M16 18h.01' />
-    </svg>
-  );
-}
