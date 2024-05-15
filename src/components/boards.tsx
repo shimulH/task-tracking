@@ -16,7 +16,7 @@ function Boards({ boards }: { boards: BoardDef[] | undefined }) {
   }, [boards]);
   return (
     <div className='p-12 flex'>
-      {boards?.map((board, index) => (
+      {/* {boards?.map((board, index) => (
         <div
           key={index + 1}
           className={cn(
@@ -27,7 +27,7 @@ function Boards({ boards }: { boards: BoardDef[] | undefined }) {
         >
           <h1>{board.name}</h1>
         </div>
-      ))}
+      ))} */}
     </div>
   );
 }

@@ -20,7 +20,7 @@ export default async function Page({
 
   return (
     <section className=''>
-      {/* <Boards boards={res?.data} /> */}
+      <Boards boards={res?.data} />
       <Board cards={cards?.data} lists={lists?.data} />
     </section>
   );
