@@ -10,9 +10,11 @@ import { Column } from '@/components/column';
 import { NewColumn } from './new-list';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { getCookie } from 'cookies-next';
-import { CardDef, ListDef } from '@/app/db/schema';
-import updateCard from '@/app/actions/updateCard';
+import { CardDef, CardIndexDef, ListDef } from '@/app/db/schema';
+import updateCard from '@/app/actions/updateCard.';
 import { DropAreaColumn } from './drop-area-columns';
+import getCardIndex from '@/app/actions/getCardIndex';
+import updateCardIndex from '@/app/actions/updateCardIndex';
 
 interface ColumnDef extends ListDef {
   cards?: CardDef[] | undefined;
@@ -27,10 +29,10 @@ export default function Board({
   const [isVisible, setIsVisible] = useState(false);
   const draggingCard = useBoardStore((state) => state.draggingCard);
   const draggingColumn = useBoardStore((state) => state.draggingColumn);
-
   const [columns, setColumns] = useState<ColumnDef[] | undefined>();
-
-  const boardId = useBoardStore((state) => state.boardId);
+  const [cardIndexByColumn, setCardIndexByColumn] = useState<
+    CardIndexDef[] | undefined
+  >();
 
   const onDrop = async (
     column: string,
@@ -78,14 +80,20 @@ export default function Board({
         const movedCard = cloneColumns[draggingCard.columnIndex].cards?.find(
           (card) => card.id === draggingCard.id
         );
-        console.log(movedCard, draggingCard);
+
+        movedCard && (await updateCard({ ...movedCard, listId: column }));
         cloneColumns[dropAreaColumn].cards?.splice(newPosition, 0, movedCard!);
 
         cloneColumns[draggingCard.columnIndex].cards = cloneColumns[
           draggingCard.columnIndex
         ].cards?.filter((card) => card.id !== draggingCard.id);
+        cloneColumns?.map((column) => {
+          updateCardIndex({
+            listId: column.id,
+            cardIndexArray: column.cards?.map((card) => card.id),
+          });
+        });
       }
-
       // @ts-ignore
       if (document.startViewTransition) {
         // @ts-ignore
@@ -114,7 +122,6 @@ export default function Board({
 
     const prevPosition = Number(draggingColumn);
     const newPosition = index;
-    console.log('before', columns);
 
     let cloneColumns = columns && [...columns];
 
@@ -125,8 +132,6 @@ export default function Board({
     );
 
     setColumns(cloneColumns);
-
-    console.log('after', columns);
   };
 
   useEffect(() => {
@@ -137,6 +142,33 @@ export default function Board({
       }))
     );
   }, [lists]);
+
+  useEffect(() => {
+    const fetchIndex = async () => {
+      const res = await getCardIndex();
+      setCardIndexByColumn(res?.data);
+
+      // setColumns();
+    };
+    fetchIndex();
+  }, []);
+
+  useEffect(() => {
+    let cloneColumns = columns && [...columns];
+
+    cloneColumns = cloneColumns?.map((col) =>
+      cardIndexByColumn?.map((data) => {
+        if (data.listId === col.id) {
+          let temCards: CardDef[] = [];
+          data.cardIndexArray?.map((index) => {
+            temCards.push(col.cards?.find((card) => card.id === index)!);
+          });
+          return { ...col, cards: temCards };
+        }
+      })
+    );
+    console.log(cloneColumns);
+  }, [cardIndexByColumn]);
 
   return (
     <div className='flex '>
@@ -160,7 +192,7 @@ export default function Board({
               </>
             ))}
             <div className='h-full'>
-              <NewColumn addColumns={() => console.log('kk')} title='New Col' />
+              <NewColumn title='New Col' />
             </div>
           </div>
           <ScrollBar orientation='horizontal' />

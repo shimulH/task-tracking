@@ -73,7 +73,6 @@ function CardDetails({
     reminderDate: Date;
     category: string;
   }) {
-    console.log(data);
     const payload = {
       id: card.id,
       title: data.name,
@@ -83,8 +82,6 @@ function CardDetails({
       listId: data.category,
     };
     const res = await updateCard(payload);
-
-    console.log(res);
   }
   useEffect(() => {
     setValue('name', card.title);
@@ -99,7 +96,6 @@ function CardDetails({
     const fetchLists = async () => {
       const res = await getLists(params.get('boardId')!);
       setColumns(res?.data);
-      console.log(res);
     };
     fetchLists();
   }, []);

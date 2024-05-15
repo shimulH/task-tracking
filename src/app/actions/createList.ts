@@ -32,7 +32,6 @@ async function createList({
 
   const createdList = await db.select().from(List).where(eq(List.id, listId));
   revalidatePath('/boards');
-  console.log(res);
 
   return { success: true, data: createdList };
 }

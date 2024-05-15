@@ -7,13 +7,7 @@ import { useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { Input } from './ui/input';
 
-export const NewColumn = ({
-  title,
-  addColumns,
-}: {
-  title: ColumnProps['title'];
-  addColumns: () => void;
-}) => {
+export const NewColumn = () => {
   const params = useSearchParams();
 
   const [isCreateForm, setCreateForm] = useState(false);
@@ -31,7 +25,6 @@ export const NewColumn = ({
     };
     const res = await createList(payload);
     setCreateForm(false);
-    // console.log(res);
   };
 
   return (

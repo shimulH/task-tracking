@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ColumnProps } from '@/types/types';
 import { DropArea } from '@/components/drop-area';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -10,6 +10,7 @@ import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import CreateCard from './create-card';
 import deleteList from '@/app/actions/deleteList';
 import { TrashIcon } from '@radix-ui/react-icons';
+import getCardIndex from '@/app/actions/getCardIndex';
 
 export const Column = ({ title, id, cards, onDrop, index }: ColumnProps) => {
   const setDraggingCard = useBoardStore((state) => state.setDraggingColumn);

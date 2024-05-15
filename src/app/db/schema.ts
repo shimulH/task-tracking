@@ -86,6 +86,10 @@ export const CardActivity = pgTable('card_activity', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
+export const CardIndex = pgTable('card_index', {
+  listId: uuid('list_id').references(() => List.id),
+  cardIndexArray: uuid('card_index_array').array(),
+});
 //Relations
 export const UserTableRelations = relations(User, ({ one, many }) => {
   return {
@@ -142,6 +146,7 @@ export const ListTableRelations = relations(List, ({ one, many }) => {
   return {
     board: one(Board, { fields: [List.boardId], references: [Board.id] }),
     card: many(Card),
+    cardIndex: one(CardIndex),
   };
 });
 
@@ -176,7 +181,17 @@ export const BoardDLabelTableRelations = relations(
   }
 );
 
+export const CardIndexRelations = relations(CardIndex, ({ one }) => {
+  return {
+    listId: one(List, {
+      fields: [CardIndex.listId],
+      references: [List.id],
+    }),
+  };
+});
+
 export type UserDef = typeof User.$inferSelect;
 export type ListDef = typeof List.$inferSelect;
 export type BoardDef = typeof Board.$inferSelect;
 export type CardDef = typeof Card.$inferSelect;
+export type CardIndexDef = typeof CardIndex.$inferSelect;

@@ -2,7 +2,7 @@
 import { BoardDef } from '@/app/db/schema';
 import { cn } from '@/lib/utils';
 import { useBoardStore } from '@/store/board-store';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 function boards({ boards }: { boards: BoardDef[] | undefined }) {
@@ -11,9 +11,12 @@ function boards({ boards }: { boards: BoardDef[] | undefined }) {
   const searchParams = useSearchParams();
   const boardId = searchParams.get('boardId');
 
+  useEffect(() => {
+    boards && router.push(`${pathName}?boardId=${boards[0].id}`);
+  }, [boards]);
   return (
-    <div className='p-12 flex'>
-      {boards?.map((board, index) => (
+    <div>
+      {/* {boards?.map((board, index) => (
         <div
           key={index + 1}
           className={cn(
@@ -24,7 +27,7 @@ function boards({ boards }: { boards: BoardDef[] | undefined }) {
         >
           <h1>{board.name}</h1>
         </div>
-      ))}
+      ))} */}
     </div>
   );
 }

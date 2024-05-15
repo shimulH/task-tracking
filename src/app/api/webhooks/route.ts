@@ -21,7 +21,6 @@ async function validateRequest(request: Request) {
 
 export async function POST(request: Request) {
   const payload = await validateRequest(request);
-  console.log('webhook', payload);
   if (payload.type === 'user.created') {
     const res = await createUser(
       payload.data.id,
@@ -29,7 +28,6 @@ export async function POST(request: Request) {
       payload.data.first_name ?? '',
       payload.data.last_name ?? ''
     );
-    console.log('res', res);
   }
   return Response.json({ message: 'Received' });
 }

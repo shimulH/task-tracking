@@ -22,7 +22,7 @@ async function updateCard({
   description: CardDef['description'];
   reminderDate: CardDef['reminderDate'];
 }) {
-  log.info('creating card..');
+  log.info('update card..');
   const res = await db
     .update(Card)
     .set({
@@ -38,7 +38,6 @@ async function updateCard({
     })
     .where(eq(Card.id, id));
 
-  console.log(res);
   revalidatePath('/boards');
 
   return { success: true };

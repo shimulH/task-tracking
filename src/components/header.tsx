@@ -13,6 +13,7 @@ import {
   DropdownMenuContent,
   DropdownMenu,
 } from '@/components/ui/dropdown-menu';
+import { UserButton } from '@clerk/nextjs';
 
 export default function Header() {
   return (
@@ -21,7 +22,8 @@ export default function Header() {
         <MountainIcon className='h-6 w-6 text-white' />
         <span className='text-white'>Acme Inc</span>
       </Link>
-      <DropdownMenu>
+      <UserButton />
+      {/* <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Avatar className='h-9 w-9 cursor-pointer'>
             <AvatarImage alt='@shadcn' src='/placeholder-avatar.jpg' />
@@ -45,7 +47,7 @@ export default function Header() {
             Logout
           </DropdownMenuItem>
         </DropdownMenuContent>
-      </DropdownMenu>
+      </DropdownMenu> */}
     </header>
   );
 }

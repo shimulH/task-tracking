@@ -7,7 +7,7 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'TASK TRACKER',
+  title: 'Task Tracker',
   description: 'Manage your task',
 };
 export default function RootLayout({
