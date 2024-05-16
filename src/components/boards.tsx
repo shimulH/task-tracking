@@ -12,6 +12,12 @@ function Boards({ boards }: { boards: BoardDef[] | undefined }) {
   const boardId = searchParams.get('boardId');
 
   useEffect(() => {
+    /* 
+      Set the param of the board id so that from the server
+      end the list api can work
+
+      !important this feature is under development
+    */
     boards && router.push(`${pathName}?boardId=${boards[0].id}`);
   }, [boards]);
   return (

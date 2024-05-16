@@ -166,7 +166,6 @@ function CardDetails({
                 type='datetime-local'
                 {...register('dueDate', { valueAsDate: true })}
                 min={Date.now()}
-                // defaultValue={new Date().toISOString().substring(0, 10)}
               />
             </div>
 

@@ -30,6 +30,9 @@ export default function Board({
     CardIndexDef[] | undefined
   >();
 
+  /* 
+     OnDrop is triggered whenever any card/task enter the drop area
+    */
   const onDrop = async (
     column: string,
     index: number,
@@ -37,14 +40,29 @@ export default function Board({
   ) => {
     if (!draggingCard) return;
 
+    /* 
+      Here index is come from the drop are and and represent the
+      index of that column
+    */
     const newPosition = index;
+    /* 
+      Here cardIndex is come from the drag column and represent the
+      index of that column
+    */
     const prevPosition = draggingCard.cardIndex;
+
+    /* 
+      check if the drag is performed in the same column or different
+    */
     if (draggingCard.columnIndex === dropAreaColumn) {
       let cloneColumns = columns && [...columns];
       let cloneFilteredCards = cloneColumns && [
         ...cloneColumns[dropAreaColumn].cards!,
       ];
 
+      /* 
+      Here the card array is spliced with the new position
+    */
       cloneFilteredCards?.splice(
         newPosition,
         0,
@@ -52,9 +70,16 @@ export default function Board({
       );
 
       if (cloneColumns) {
+        /* 
+      assigning the new card array to the column 
+    */
         cloneColumns[dropAreaColumn].cards = cloneFilteredCards;
       }
 
+      /* 
+      This peace of code is for animation of the drag and drop
+      it used the view transition api for the nice drop animation
+    */
       // @ts-ignore
       if (document.startViewTransition) {
         // @ts-ignore
@@ -69,14 +94,24 @@ export default function Board({
       }
     }
 
+    /* 
+      check if the drag is performed in the  different column
+    */
+
     if (draggingCard.columnIndex !== dropAreaColumn) {
       let cloneColumns = columns && [...columns];
 
       if (cloneColumns && draggingCard) {
+        /* 
+         get the moved card by the index of the prevous column
+       */
         const movedCard = cloneColumns[draggingCard.columnIndex].cards?.find(
           (card) => card.id === draggingCard.id
         );
 
+        /* 
+           Call the api to save the updated column of the card
+        */
         movedCard && (await updateCard({ ...movedCard, listId: column }));
         cloneColumns[dropAreaColumn].cards?.splice(newPosition, 0, movedCard!);
 
@@ -84,6 +119,10 @@ export default function Board({
           draggingCard.columnIndex
         ].cards?.filter((card) => card.id !== draggingCard.id);
         cloneColumns?.map((column) => {
+          /* 
+           Call the card-index api to save the updated column of the card
+           !Card index table is used for the track of the sorting of the card array
+          */
           updateCardIndex({
             listId: column.id,
             cardIndexArray: column.cards?.map((card) => card.id) ?? null,
@@ -105,14 +144,10 @@ export default function Board({
     }
   };
 
-  const showArea = () => {
-    setIsVisible(true);
-  };
-
-  const hideArea = () => {
-    setIsVisible(false);
-  };
-
+  /* 
+     OnDrop is triggered whenever any column/label enter the drop area
+     this is same functionality as the first portion of the onDrop function
+    */
   const handleDrop = (index: number) => {
     if (!draggingColumn) return;
 
@@ -131,6 +166,9 @@ export default function Board({
   };
 
   useEffect(() => {
+    /* 
+     update the list with the card array
+    */
     setColumns(
       lists?.map((column) => ({
         ...column,
@@ -138,6 +176,12 @@ export default function Board({
       }))
     );
   }, [lists]);
+
+  /* 
+     !This is incomplete code
+     this code is for performant way of tracking the order of 
+     the component, there is some bugs so I commented it before submission
+    */
 
   useEffect(() => {
     const fetchIndex = async () => {
