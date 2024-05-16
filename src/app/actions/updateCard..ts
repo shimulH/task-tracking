@@ -22,25 +22,29 @@ async function updateCard({
   description: CardDef['description'];
   reminderDate: CardDef['reminderDate'];
 }) {
-  log.info('update card..');
-  const res = await db
-    .update(Card)
-    .set({
-      id,
-      title,
-      description,
-      dueDate,
-      reminderDate,
-      listId,
-      isActive: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    })
-    .where(eq(Card.id, id));
+  try {
+    log.info('update card..');
+    const res = await db
+      .update(Card)
+      .set({
+        id,
+        title,
+        description,
+        dueDate,
+        reminderDate,
+        listId,
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .where(eq(Card.id, id));
 
-  revalidatePath('/boards');
+    revalidatePath('/boards');
 
-  return { success: true };
+    return { success: true };
+  } catch {
+    return { success: false, status: 500, error: 'Something went wrong' };
+  }
 }
 
 export default updateCard;

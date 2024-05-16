@@ -6,16 +6,20 @@ import { log } from '../log';
 import { revalidatePath } from 'next/cache';
 
 async function updateCardIndex({ listId, cardIndexArray }: CardIndexDef) {
-  log.info('update cardIndex..');
-  const res = await db.insert(CardIndex).values({
-    listId,
-    cardIndexArray,
-  });
+  try {
+    log.info('update cardIndex..');
+    const res = await db.insert(CardIndex).values({
+      listId,
+      cardIndexArray,
+    });
 
-  revalidatePath('/boards');
-  console.log(res);
+    revalidatePath('/boards');
+    console.log(res);
 
-  return { success: true };
+    return { success: true };
+  } catch {
+    return { success: false, status: 500, error: 'Something went wrong' };
+  }
 }
 
 export default updateCardIndex;

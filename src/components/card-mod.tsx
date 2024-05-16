@@ -7,13 +7,7 @@ import { DialogTrigger } from '@radix-ui/react-dialog';
 import { Dialog } from './ui/dialog';
 import deleteCard from '@/app/actions/deleteCard';
 import { TrashIcon } from '@radix-ui/react-icons';
-import {
-  format,
-  formatDistanceToNow,
-  intervalToDuration,
-  sub,
-  subMinutes,
-} from 'date-fns';
+import { format } from 'date-fns';
 import { cn, compareDates } from '@/lib/utils';
 
 export default function CardMod({

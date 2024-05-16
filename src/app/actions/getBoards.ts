@@ -11,13 +11,8 @@ import { eq } from 'drizzle-orm';
 
 async function getBoards() {
   try {
-    log.info('creating list..');
-    //   const res = await db.insert(Board).values({
-    //     id: uuidv4(),
-    //     name,
-    //     boardId,
-    //     position,
-    //   });
+    log.info('getting board..');
+
     const user = await currentUser();
     if (user) {
       const res = await db.select().from(Board);

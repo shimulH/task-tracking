@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 
 import { DialogClose, DialogContent, DialogFooter } from './ui/dialog';
-import DateTimePicker from 'react-datetime-picker';
-
 import {
   Select,
   SelectContent,
@@ -20,20 +18,11 @@ import {
 } from '@/components/ui/form';
 import { Label } from '@radix-ui/react-dropdown-menu';
 import { Input } from './ui/input';
-import { CalendarIcon } from '@radix-ui/react-icons';
-import { format, sub, subMinutes } from 'date-fns';
-
-import { cn } from '@/lib/utils';
+import { format, subMinutes } from 'date-fns';
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
 
 import { Textarea } from './ui/textarea';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { DefaultRemindMeTime } from '@/lib/constsnts';
 import createCard from '@/app/actions/createCard';
 import getLists from '@/app/actions/getLists';

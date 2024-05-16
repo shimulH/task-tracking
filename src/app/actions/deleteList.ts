@@ -6,11 +6,15 @@ import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 async function deleteList({ id }: { id: string }) {
-  log.info('deleting list..');
+  try {
+    log.info('deleting list..');
 
-  await db.delete(List).where(eq(List.id, id));
-  revalidatePath('/boards');
-  return { success: true };
+    await db.delete(List).where(eq(List.id, id));
+    revalidatePath('/boards');
+    return { success: true };
+  } catch {
+    return { success: false, status: 500, error: 'Something went wrong' };
+  }
 }
 
 export default deleteList;

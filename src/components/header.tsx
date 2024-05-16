@@ -1,18 +1,4 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/kauzCQXVybJ
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
 import Link from 'next/link';
-import { AvatarImage, AvatarFallback, Avatar } from '@/components/ui/avatar';
-import {
-  DropdownMenuTrigger,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuItem,
-  DropdownMenuContent,
-  DropdownMenu,
-} from '@/components/ui/dropdown-menu';
 import { UserButton } from '@clerk/nextjs';
 
 export default function Header() {
@@ -20,56 +6,10 @@ export default function Header() {
     <header className='flex h-16 sticky top-0 shadow-sm w-full items-center justify-between bg-gray-900 px-4 md:px-6'>
       <Link className='flex items-center gap-2' href='#'>
         <MountainIcon className='h-6 w-6 text-white' />
-        <span className='text-white'>Acme Inc</span>
+        <span className='text-white'>Task Tracker</span>
       </Link>
       <UserButton />
-      {/* <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Avatar className='h-9 w-9 cursor-pointer'>
-            <AvatarImage alt='@shadcn' src='/placeholder-avatar.jpg' />
-            <AvatarFallback>JP</AvatarFallback>
-          </Avatar>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className='w-56'>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <UserIcon className='mr-2 h-4 w-4' />
-            Profile
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <SettingsIcon className='mr-2 h-4 w-4' />
-            Settings
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <LogOutIcon className='mr-2 h-4 w-4' />
-            Logout
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu> */}
     </header>
-  );
-}
-
-function LogOutIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns='http://www.w3.org/2000/svg'
-      width='24'
-      height='24'
-      viewBox='0 0 24 24'
-      fill='none'
-      stroke='currentColor'
-      strokeWidth='2'
-      strokeLinecap='round'
-      strokeLinejoin='round'
-    >
-      <path d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4' />
-      <polyline points='16 17 21 12 16 7' />
-      <line x1='21' x2='9' y1='12' y2='12' />
-    </svg>
   );
 }
 

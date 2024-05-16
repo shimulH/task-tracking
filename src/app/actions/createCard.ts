@@ -19,23 +19,26 @@ async function createCard({
   description: CardDef['description'];
   reminderDate: CardDef['reminderDate'];
 }) {
-  log.info('creating card..');
-  const res = await db.insert(Card).values({
-    id: uuidv4(),
-    title,
-    description,
-    dueDate,
-    reminderDate,
-    listId,
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  });
+  try {
+    log.info('creating card..');
+    await db.insert(Card).values({
+      id: uuidv4(),
+      title,
+      description,
+      dueDate,
+      reminderDate,
+      listId,
+      isActive: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
 
-  console.log(res);
-  revalidatePath('/boards');
+    revalidatePath('/boards');
 
-  return { success: true };
+    return { success: true };
+  } catch {
+    return { success: false, status: 500, error: 'Something went wrong' };
+  }
 }
 
 export default createCard;

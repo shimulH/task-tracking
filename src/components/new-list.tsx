@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import type { ColumnProps } from '@/types/types';
 import { Button } from '@/components/ui/button';
-import { PlusIcon } from '@/components/icons/plus-icon';
 import createList from '@/app/actions/createList';
 import { useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
