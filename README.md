@@ -1,18 +1,22 @@
 # Project Name
-## Task Tracker  
-**demo**  [https://task-tracking-3l9f1jqo4-shimul-hassans-projects-6154cca6.vercel.app/](https://task-tracking-theta.vercel.app/)
+
+## Task Tracker
+
+**demo** [https://task-tracking-3l9f1jqo4-shimul-hassans-projects-6154cca6.vercel.app/](https://task-tracking-theta.vercel.app/)
 
 ## Important
-- **You will find some commented codes in the code base, Those are some incopmplete features that I could not finish for the time. ***I am doin this project when there is realese in my current company***, So i found very little time to contribute, **but I think it has all the neccessary thigs you need to gett an idea of my work***.I learned a lot from this project, I planed and build in a way that it can be scaled in any time.** 
+
+- **You will find some commented codes in the code base, Those are some incopmplete features that I could not finish for the time. \***I am doin this project when there is realese in my current company**\*, So i found very little time to contribute, **but I think it has all the neccessary thigs you need to gett an idea of my work**\*.I learned a lot from this project, I planed and build in a way that it can be scaled in any time.**
 - **The Projectt is created in a way this can be a full real trello like app with all the fuctionality. It has Database tables for users, board, column, tasks, categories, card label and board label categories, card and board label board maeber table. It has simple and small state maneger Zustand, Next-14 for future proof which has all the necessary things for fast, performant and scalable app**
 
-
 ## Overview
-This is a Task management web app, You can say a trello like app. This is an **full-stack** app. The drag and drop feature is implemented usign HTML5 drag and drop, the app can do column and task label drag n drop. 
 
-This projects uses all the latest technologies like react server component, nextjs app router, server client comunication, tailwindCSS, shadcn, zustand, Neon.dev for porstgres DB, Drizzle postgress Client nextjs as server and route, react-hook-form.
+This is a Task management web app, You can say a trello like app. This is an **full-stack** app exclusively in **TypeScript**. The drag and drop feature is implemented usign HTML5 drag and drop, the app can do column and task label drag n drop.
+
+This projects uses all the latest technologies like react server component, **Nextjs-14** app router, server client comunication, tailwindCSS, shadcn, zustand, Neon.dev for porstgres DB, Drizzle postgress Client nextjs as server and route, react-hook-form.
 
 ##Structure
+
 ```
 └───src
     ├───app
@@ -37,8 +41,8 @@ This projects uses all the latest technologies like react server component, next
 
 ## Features
 
-- Task Drag and Drop (Used prforman way to calculate and filterout the dragged component)
-- Column Drag and Drop  (Used prforman way to calculate and filterout the dragged component)
+- Task Drag and Drop (Used performant way to calculate and filter out the dragged component)
+- Column Drag and Drop (Used performant way to calculate and filter out the dragged component)
 - Task Create, Delete, Update
 - Column Create, Delete, Update
 - Board Create, Delete, Update
@@ -67,19 +71,30 @@ This projects uses all the latest technologies like react server component, next
 
 Vercel was chosen for deployment due to its seamless integration with Next.js projects, providing automatic deployments, instant serverless functions, and global CDN for optimized performance. The platform also offers easy scalability and a simple workflow for continuous deployment.
 
-
 ## Getting Started
 
 First, run the development server:
+Used pnpm for faster development experience.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+
 pnpm dev
-# or
-bun dev
+
+```
+
+For db migration:
+
+```bash
+npx drizzle-kit push
+
+```
+
+For schema generate and seed:
+
+```bash
+pnpm db:generate
+pnpm drizzle:seed
+
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
